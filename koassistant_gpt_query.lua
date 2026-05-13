@@ -45,6 +45,7 @@ loadHandler("anthropic")
 loadHandler("openai")
 loadHandler("deepseek")
 loadHandler("ollama")
+loadHandler("ollama-cloud")
 loadHandler("gemini")
 -- New providers
 loadHandler("groq")
@@ -79,6 +80,14 @@ local function getApiKey(provider, settings)
     if success and apikeys and apikeys[provider] then
         return apikeys[provider]
     end
+
+    -- 3. ollama-cloud falls back to ollama key (same account)
+    if provider == "ollama-cloud" then
+        if success and apikeys and apikeys["ollama"] then
+            return apikeys["ollama"]
+        end
+    end
+
     return nil
 end
 
@@ -375,7 +384,7 @@ local function queryChatGPT(message_history, temp_config, on_complete, settings)
 
     -- Check if API key is required
     local api_key_required = true
-    if provider == "ollama" then
+    if provider == "ollama" or provider == "ollama-cloud" then
         api_key_required = false
     elseif is_custom_provider and custom_provider_config then
         -- Custom providers can optionally not require an API key (for local servers)

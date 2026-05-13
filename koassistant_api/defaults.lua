@@ -16,7 +16,8 @@ local function getDefaultModel(provider)
         openai = "gpt-5.4",
         deepseek = "deepseek-chat",
         gemini = "gemini-2.5-flash",
-        ollama = "llama3.3",
+        ollama = "kimi-k2.6:cloud",
+        ["ollama-cloud"] = "kimi-k2.6",
         groq = "llama-3.3-70b-versatile",
         mistral = "mistral-large-latest",
         xai = "grok-4-1-fast-non-reasoning",
@@ -85,6 +86,14 @@ local ProviderDefaults = {
         provider = "ollama",
         model = getDefaultModel("ollama"),
         base_url = "http://localhost:11434/api/chat",
+        additional_parameters = {
+            temperature = 0.7
+        }
+    },
+    ["ollama-cloud"] = {
+        provider = "ollama-cloud",
+        model = getDefaultModel("ollama-cloud"),
+        base_url = "https://ollama.com/api/chat",
         additional_parameters = {
             temperature = 0.7
         }

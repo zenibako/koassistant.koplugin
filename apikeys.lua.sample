@@ -23,9 +23,14 @@ return {
     -- Get from: https://aistudio.google.com/
     gemini = "YOUR_GEMINI_API_KEY",
     
-    -- Ollama typically doesn't need an API key if running locally
+    -- Ollama (local) typically doesn't need an API key
     -- If using a remote Ollama instance, you can set a key here if required
     ollama = "",
+
+    -- Ollama Cloud (direct API at ollama.com) - requires an API key
+    -- Get from: https://ollama.com/settings/keys
+    -- Falls back to ollama key if not set
+    ["ollama-cloud"] = "",
 
     -- Groq API key (fast inference)
     -- Get from: https://console.groq.com/

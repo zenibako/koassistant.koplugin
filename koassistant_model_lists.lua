@@ -1,6 +1,6 @@
 -- Model lists for each provider
 -- SINGLE SOURCE OF TRUTH for all model data
--- Last updated: 2026-03-31
+-- Last updated: 2026-05-12
 --
 -- Structure:
 --   ModelLists[provider] = array of model IDs (for backward compat & dropdowns)
@@ -69,43 +69,97 @@ local ModelLists = {
     },
 
     ollama = {
-        -- Llama 3.x (Meta) - most popular open models
+        -- Cloud models (via local proxy - use :cloud suffix to run on Ollama Cloud GPU)
+        "kimi-k2.6:cloud",              -- Moonshot multimodal agentic
+        "deepseek-v4-pro:cloud",        -- frontier MoE + reasoning modes
+        "deepseek-v4-flash:cloud",      -- efficient MoE, 1M context
+        "gemma4:31b-cloud",             -- Google frontier multimodal
+        "qwen3.5:cloud",                -- Alibaba multimodal
+        "qwen3.5:397b-cloud",           -- Alibaba MoE flagship
+
+        -- Popular local models
         "llama3.3",                     -- latest Llama 3 (default)
         "llama3.3:70b",
         "llama3.2",
         "llama3.2:3b",
-        "llama3.2:1b",                  -- ultrafast
+        "llama3.2:1b",
         "llama3.1",
         "llama3.1:70b",
-        -- Qwen (Alibaba) - excellent multilingual
         "qwen3",
         "qwen3:8b",
         "qwen3:32b",
         "qwen2.5",
-        "qwen2.5:0.5b",                 -- tiny, good for testing
+        "qwen2.5:0.5b",
         "qwen2.5:7b",
         "qwen2.5:32b",
         "qwen2.5:72b",
-        -- DeepSeek
-        "deepseek-r1",                  -- reasoning
+        "deepseek-r1",
         "deepseek-r1:8b",
         "deepseek-r1:70b",
         "deepseek-v3",
-        -- Gemma (Google)
+        "gemma4",
+        "gemma4:e2b",
+        "gemma4:e4b",
+        "gemma4:26b",
+        "gemma4:31b",
         "gemma3",
         "gemma3:4b",
         "gemma3:27b",
         "gemma2",
         "gemma2:9b",
         "gemma2:27b",
-        -- Mistral
         "mistral",
-        "mistral-nemo",                 -- Apache 2.0, 12B
-        -- Phi (Microsoft) - small but capable
+        "mistral-nemo",
         "phi4",
         "phi3",
-        -- Tiny models
-        "tinyllama",                    -- ~637MB, good for testing
+        "tinyllama",
+    },
+
+    ["ollama-cloud"] = {
+        -- Same models as local, but without :cloud suffix (direct Ollama.com API)
+        "kimi-k2.6",                    -- Moonshot multimodal agentic (default)
+        "deepseek-v4-pro",              -- frontier MoE + reasoning modes
+        "deepseek-v4-flash",            -- efficient MoE, 1M context
+        "gemma4:31b",                   -- Google frontier multimodal
+        "qwen3.5",                      -- Alibaba multimodal
+        "qwen3.5:397b",                 -- Alibaba MoE flagship
+
+        -- Popular local models (also available via cloud)
+        "llama3.3",
+        "llama3.3:70b",
+        "llama3.2",
+        "llama3.2:3b",
+        "llama3.2:1b",
+        "llama3.1",
+        "llama3.1:70b",
+        "qwen3",
+        "qwen3:8b",
+        "qwen3:32b",
+        "qwen2.5",
+        "qwen2.5:0.5b",
+        "qwen2.5:7b",
+        "qwen2.5:32b",
+        "qwen2.5:72b",
+        "deepseek-r1",
+        "deepseek-r1:8b",
+        "deepseek-r1:70b",
+        "deepseek-v3",
+        "gemma4",
+        "gemma4:e2b",
+        "gemma4:e4b",
+        "gemma4:26b",
+        "gemma4:31b",
+        "gemma3",
+        "gemma3:4b",
+        "gemma3:27b",
+        "gemma2",
+        "gemma2:9b",
+        "gemma2:27b",
+        "mistral",
+        "mistral-nemo",
+        "phi4",
+        "phi3",
+        "tinyllama",
     },
 
     groq = {
@@ -396,7 +450,8 @@ local ModelLists = {
             mistral = "magistral-medium-latest",
             xai = "grok-4-1-fast-reasoning",
             cohere = "command-a-reasoning-08-2025",
-            ollama = "deepseek-r1",
+            ollama = "deepseek-v4-pro:cloud",      -- frontier MoE + reasoning modes
+            ["ollama-cloud"] = "deepseek-v4-pro",  -- via direct API
             openrouter = "deepseek/deepseek-r1",
             together = "Qwen/Qwen3.5-397B-A17B",
             fireworks = "accounts/fireworks/models/deepseek-r1",
@@ -418,7 +473,8 @@ local ModelLists = {
             mistral = "mistral-large-latest",
             xai = "grok-4-1-fast-non-reasoning",
             cohere = "command-a-03-2025",
-            ollama = "llama3.3",
+            ollama = "kimi-k2.6:cloud",            -- multimodal agentic flagship
+            ["ollama-cloud"] = "kimi-k2.6",            -- via direct API
             openrouter = "anthropic/claude-sonnet-4.6",
             together = "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
             fireworks = "accounts/fireworks/models/llama4-maverick-instruct-basic",
@@ -440,7 +496,8 @@ local ModelLists = {
             mistral = "mistral-medium-latest",
             xai = "grok-3",
             cohere = "command-r-plus-08-2024",
-            ollama = "llama3.3:70b",
+            ollama = "qwen3.5:cloud",              -- balanced multimodal cloud
+            ["ollama-cloud"] = "qwen3.5",            -- via direct API
             openrouter = "google/gemini-2.5-pro",
             together = "meta-llama/Llama-3.3-70B-Instruct-Turbo",
             fireworks = "accounts/fireworks/models/llama-v3p3-70b-instruct",
@@ -462,7 +519,8 @@ local ModelLists = {
             mistral = "mistral-small-latest",
             xai = "grok-4-fast",
             cohere = "command-r-08-2024",
-            ollama = "llama3.2:3b",
+            ollama = "deepseek-v4-flash:cloud",  -- efficient 1M context reasoning
+            ["ollama-cloud"] = "deepseek-v4-flash",  -- via direct API
             openrouter = "google/gemini-2.5-flash",
             together = "mistralai/Mistral-Small-24B-Instruct-2501",
             fireworks = "accounts/fireworks/models/llama-v3p3-70b-instruct",

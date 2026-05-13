@@ -429,6 +429,11 @@ local function loadMergedApiKeys()
         end
     end
 
+    -- ollama-cloud falls back to ollama key (same account)
+    if not api_keys["ollama-cloud"] and api_keys["ollama"] then
+        api_keys["ollama-cloud"] = api_keys["ollama"]
+    end
+
     return api_keys
 end
 

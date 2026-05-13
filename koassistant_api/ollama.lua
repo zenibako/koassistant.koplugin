@@ -22,7 +22,8 @@ end
 --- @param config table: Unified config from buildUnifiedRequestConfig
 --- @return table: { body = table, headers = table, url = string }
 function OllamaHandler:buildRequestBody(message_history, config)
-    local defaults = Defaults.ProviderDefaults.ollama
+    local provider_id = self.provider_id or "ollama"
+    local defaults = Defaults.ProviderDefaults[provider_id]
     local model = config.model or defaults.model
 
     local request_body = {
@@ -59,17 +60,23 @@ function OllamaHandler:buildRequestBody(message_history, config)
         ["Content-Type"] = "application/json",
     }
 
+    -- Add Authorization header if API key is provided (required for Ollama Cloud)
+    if config.api_key and config.api_key ~= "" then
+        headers["Authorization"] = "Bearer " .. config.api_key
+    end
+
     return {
         body = request_body,
         headers = headers,
         url = config.base_url or defaults.base_url,
         model = model,
-        provider = "ollama",
+        provider = provider_id,
     }
 end
 
 function OllamaHandler:query(message_history, config)
-    local defaults = Defaults.ProviderDefaults.ollama
+    local provider_id = self.provider_id or "ollama"
+    local defaults = Defaults.ProviderDefaults[provider_id]
     local model = config.model or defaults.model
 
     -- Build request body using unified config
@@ -123,6 +130,11 @@ function OllamaHandler:query(message_history, config)
         ["Content-Length"] = tostring(#requestBody),
     }
 
+    -- Add Authorization header if API key is provided (required for Ollama Cloud)
+    if config.api_key and config.api_key ~= "" then
+        headers["Authorization"] = "Bearer " .. config.api_key
+    end
+
     local base_url = config.base_url or defaults.base_url
 
     -- If streaming is enabled, return the background request function
@@ -141,7 +153,7 @@ function OllamaHandler:query(message_history, config)
             DebugUtils.print("Ollama Parsed Response:", response, config)
         end
 
-        local parse_success, result, reasoning = ResponseParser:parseResponse(response, "ollama")
+        local parse_success, result, reasoning = ResponseParser:parseResponse(response, provider_id)
         if not parse_success then
             return false, "Error: " .. result
         end
