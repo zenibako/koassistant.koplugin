@@ -543,6 +543,7 @@ local ModelLists = {
             xai = "grok-3-mini",
             cohere = "command-r7b-12-2024",
             ollama = "qwen2.5:0.5b",
+            ["ollama-cloud"] = "qwen2.5:0.5b", -- via direct API
             openrouter = "google/gemini-3-flash-preview",   -- FREE tier
             together = "mistralai/Mistral-Small-24B-Instruct-2501",
             fireworks = "accounts/fireworks/models/llama-v3p3-70b-instruct",
@@ -632,8 +633,13 @@ local ModelLists = {
         },
         ollama = {
             api_list = "http://localhost:11434/api/tags",
-            docs = "https://github.com/ollama/ollama/blob/main/docs/api.md",
+            docs = "https://docs.ollama.com/api",
             library = "https://ollama.com/library",
+        },
+        ["ollama-cloud"] = {
+            api_list = "https://ollama.com/api/tags",
+            docs = "https://docs.ollama.com/cloud",
+            library = "https://ollama.com/search?c=cloud",
         },
     },
 

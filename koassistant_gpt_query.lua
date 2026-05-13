@@ -83,8 +83,17 @@ local function getApiKey(provider, settings)
 
     -- 3. ollama-cloud falls back to ollama key (same account)
     if provider == "ollama-cloud" then
+        -- 3a. Fall back to file ollama key (if no file key was found above)
         if success and apikeys and apikeys["ollama"] then
             return apikeys["ollama"]
+        end
+        -- 3b. Fall back to GUI ollama key (if no GUI key was found above)
+        if settings then
+            local features = settings:readSetting("features") or {}
+            local gui_keys = features.api_keys or {}
+            if gui_keys["ollama"] and gui_keys["ollama"] ~= "" then
+                return gui_keys["ollama"]:match("^%s*(.-)%s*$")
+            end
         end
     end
 

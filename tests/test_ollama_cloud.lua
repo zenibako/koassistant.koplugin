@@ -1,14 +1,26 @@
 #!/usr/bin/env lua
 -- Quick end-to-end test for Ollama Cloud
 
-local plugin_dir = "/Volumes/Kindle/koreader/plugins/koassistant.koplugin"
-package.path = plugin_dir .. "/?.lua;" .. plugin_dir .. "/tests/?.lua;" .. plugin_dir .. "/tests/lib/?.lua;" .. package.path
+-- Setup package path for plugin modules (same logic as inspect.lua)
+local function setupPaths()
+    local info = debug.getinfo(1, "S")
+    local script_path = info.source:match("@?(.*)")
+    local script_dir = script_path:match("(.*/)") or "./"
+    local plugin_dir = script_dir:gsub("tests/$", ""):gsub("/$", "")
+    if plugin_dir == "" then plugin_dir = "." end
+    package.path = script_dir .. "lib/?.lua;" ..
+                   script_dir .. "?.lua;" ..
+                   plugin_dir .. "/?.lua;" ..
+                   package.path
+    return plugin_dir
+end
+
+setupPaths()
 
 require("mock_koreader")
 
 local TestConfig = require("test_config")
 local TestHelpers = require("test_helpers")
-local json = require("json")
 
 -- Load API keys
 local api_keys = TestConfig.loadApiKeys()
